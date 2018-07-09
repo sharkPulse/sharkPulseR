@@ -1,0 +1,19 @@
+Package: sharkPulseR
+Title: Scripts to manipulate, extract, visualize and analyze sharkPulse data
+Version: 1.2
+Authors@R: person("Francesco", "Ferretti", email = "ferretti@stanford.edu", role = c("aut", "cre"))
+Author: Francesco Ferretti [aut, cre]
+Maintainer: Francesco Ferretti <ferretti@stanford.edu>
+Description: Scripts to manipulate, extract, visualize and analyze sharkPulse data
+Depends: R (>= 3.3.1)
+License: What license is it under?
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.0.1
+Imports:
+	maps,
+	maptools,
+	mapdata,
+	sp,
+	RCurl,
+	bitops
