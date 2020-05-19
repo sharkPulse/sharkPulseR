@@ -1,6 +1,6 @@
 #' Convert csv from \code{getFlickrImages} to html Format
 #'
-#' @param csvFile file from  \code{getFlickrImages}
+#' @param csvFile file from  \code{getFlickrImages}. This csv file is usually stored in the \code{py} foldere and called \code{output.csv}.
 #' @param htmlFile output htm file 
 #' @export
 csv2html = function(csvFile = "output.csv", htmlFile = "mypage.html"){
@@ -15,7 +15,7 @@ outline = with(dat,paste("<tr><td>",lon,
 
 # ctreates html page
 
-sink(file)
+sink(htmlFile)
 cat("<html>
 		<body>
 			<code>

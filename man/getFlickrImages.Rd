@@ -15,6 +15,9 @@ getFlickrImages(query, startUploadDate, endUploadDate, geoBox)
 
 \item{geobox}{character string for a geographic box "west, south, east, north"}
 }
+\value{
+it writes a file \code{output.csv} in the \code{py} folder.
+}
 \description{
 The function will connect to Flickr and extract image links with a given tag ("shark") and then filterm them excluding points on land.
 }

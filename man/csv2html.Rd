@@ -7,7 +7,7 @@
 csv2html(csvFile = "output.csv", htmlFile = "mypage.html")
 }
 \arguments{
-\item{csvFile}{file from  \code{getFlickrImages}}
+\item{csvFile}{file from  \code{getFlickrImages}. This csv file is usually stored in the \code{py} foldere and called \code{output.csv}.}
 
 \item{htmlFile}{output htm file}
 }

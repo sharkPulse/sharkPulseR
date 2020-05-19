@@ -5,6 +5,7 @@
 #' @param startUploadDate date string yyyy-mm-dd
 #' @param endUploadDate date string yyyy-mm-dd
 #' @param geobox character string for a geographic box "west, south, east, north"
+#' @return it writes a file \code{output.csv} in the \code{py} folder. 
 #' @export  
 getFlickrImages = function(query, startUploadDate, endUploadDate, geoBox){
 
