@@ -13,7 +13,7 @@ getFlickrImages = function(query, startUploadDate, endUploadDate, geoBox){
 	setwd("../py")
 	system(paste("python flickrSearchShark.py '",query,"' ",startUploadDate," ",endUploadDate," '",geoBox,"' 0",sep=""))
 	setwd("../s")
-	pictures = read.csv("../py/output.csv")
+	pictures = read.csv("../py/'",query,"'.csv")
 	names(pictures) = c("lat","lon","datetaken","dateupload","url")
 	pictures
 
