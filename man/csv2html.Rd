@@ -4,10 +4,12 @@
 \alias{csv2html}
 \title{Convert csv from \code{getFlickrImages} to html Format}
 \usage{
-csv2html(csvFile = "output.csv", htmlFile = "mypage.html")
+csv2html(dat = dat, csvFile = NULL, htmlFile = "mypage.html")
 }
 \arguments{
-\item{csvFile}{file from  \code{getFlickrImages}. This csv file is usually stored in the \code{py} foldere and called \code{output.csv}.}
+\item{dat}{dataset output from fliskr.search}
+
+\item{csvFile}{file from  \code{getFlickrImages}. This csv file is usually stored in the \code{py} foldere and called \code{output.csv}. it has to have headers in the form of lon, lat, datetaken, dateupload, url. (csvFile = "output.csv")}
 
 \item{htmlFile}{output htm file}
 }

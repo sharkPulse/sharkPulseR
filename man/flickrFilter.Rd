@@ -4,8 +4,12 @@
 \alias{flickrFilter}
 \title{Filter flickr Results}
 \usage{
-flickrFilter(query = "shark", startUploadDate = "2015-01-02",
-  endUploadDate = "2015-12-02", geoBox = "-180, -90, 180, 90")
+flickrFilter(
+  query = "shark",
+  startUploadDate = "2015-01-02",
+  endUploadDate = "2015-12-02",
+  geoBox = "-180, -90, 180, 90"
+)
 }
 \arguments{
 \item{startUploadDate}{date string yyyy-mm-dd}

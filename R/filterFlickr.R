@@ -19,6 +19,18 @@ getFlickrImages = function(query, startUploadDate, endUploadDate, geoBox){
 
 }
 
+getFlickrImages2 = function(query, startUploadDate, endUploadDate, geoBox){
+
+ # west, south, east, east
+ 	require(flickRgeotag)
+	system(paste("python flickrSearchShark.py '",query,"' ",startUploadDate," ",endUploadDate," '",geoBox,"' 0",sep=""))
+	setwd("../s")
+	pictures = read.csv("../py/output.csv")
+	names(pictures) = c("lat","lon","datetaken","dateupload","url")
+	pictures
+
+}
+
 
 #' Filter flickr Results 
 #'
@@ -33,13 +45,51 @@ flickrFilter = function(query = "shark", startUploadDate = "2015-01-02", endUplo
 # endDate: yyyy-mm-dd
 # geobox: west, south, east, north
 # from aquaria.R
+require(flickRgeotag)
+require(googlesheets4)
+require(sf)
+
+# remove points from within aquaria locations
+
 aqua = read.table("../data/aquaCoords.txt", header = T)
+aqua = na.omit(aqua)
+aqua = st_as_sf(aqua, coords = c("lon","lat"), crs = st_crs(world))
 
-pictures = getFlickrImages(query, startUploadDate, endUploadDate, geoBox)
+# create a 1 km buffer around the points
+aqua_buffer = st_buffer(aqua, 1)
 
-#source("csv2html.R") # transforms a csv table to an html page
-csv2html(pictures,file = paste("mypageUnfiltered",query,"from",startUploadDate,"to",endUploadDate,"at",geoBox,".html", sep = ""))
-# at this point I need to create another column with all maps and another one with a simple switch yes/no for real free living or dead sharks
+#pictures = getFlickrImages(query, startUploadDate, endUploadDate, geoBox)
+photos <- flickr.photos.search(bbox = geoBox, text="squalo", .allpages = T)
+photos[,c("longitude","latitude")] = lapply(photos[,c("longitude","latitude")], as.numeric)
+qflickr.plot(photos)
+pictures.sp = sf::st_as_sf(photos, coords = c("longitude","latitude"), crs = st_crs(world))
+
+test = st_contains(pictures.sp, aqua_buffer, sparse = FALSE)
+# it returns a matrix of logical values. these are whether any x is within any y polygon
+# remove those that are true
+
+
+
+
+# to retain only coastal points I can also calculate distance between points and closest coast.
+# https://dominicroye.github.io/en/2019/calculating-the-distance-to-the-sea-in-r/
+
+
+# this is promising
+devtools::install_github("mdsumner/distancetocoast")
+library(distancetocoast)
+library(raster)
+
+dists = raster::extract(distance_to_coastline_lowres, photos[,c("longitude","latitude")])/1000 # to return kilometers
+qflickr.plot(photos[which(dists<10),]) # plots only points closer than 10 km to the coast
+
+
+
+# We need to continue from here
+
+
+
+
 
 
 # remove pictures from land with the function over
@@ -48,20 +98,41 @@ csv2html(pictures,file = paste("mypageUnfiltered",query,"from",startUploadDate,"
 #library(mapdata)
 
 
-world<-maptools::readShapeSpatial("~/Google Drive/sharkPulse/worldLand") # shape file for all countries in the world
+world<-maptools::readShapeSpatial("../maps/worldLand") # shape file for all countries in the world
 
+world<-rgdal::readOGR("../maps/worldLand")
 # Now setting the projection. I have taken a string appropriate for USA
 projection = sp::CRS("+proj=aea +lat_1=29.5 +lat_2=45.5 +lat_0=37.5 +lon_0=-96 +x_0=0 +y_0=0 +ellps=GRS80 +datum=NAD83 +units=m +no_defs")
-
 # Projections for points and polygons need to be the same
-pictures.sp = sp::SpatialPoints(pictures[,c("lon","lat")], proj4string = projection)
+pictures.sp = sp::SpatialPoints(lapply(photos[,c("longitude","latitude")], as.numeric), proj4string = projection)
 sp::proj4string(world) = projection
-
 # Now checking whether the points are in the polygons
 inland<-sp::over(pictures.sp, world) 
 
 
+
+world <- sf::read_sf("../maps/worldLand")
+# reduce world by some units  - usually degrees 
+#https://gis.stackexchange.com/questions/392505/can-i-use-r-to-do-a-buffer-inside-polygons-shrink-polygons-negative-buffer
+hrinkIfPossible <- function(sf, size) {
+  # compute inward buffer
+  sg <- st_buffer(st_geometry(sf), -size)
+  
+  # update geometry only if polygon is not degenerate
+  st_geometry(sf)[!st_is_empty(sg)] = sg[!st_is_empty(sg)]
+   
+  # return updated dataset
+  return(sf)
+}
+
+shp_buffered <- shrinkIfPossible(world, 10)
+
+pictures.sp = sf::st_as_sf(photos, coords = c("longitude","latitude"), crs = st_crs(world))
+
+inland = st_contains(pictures.sp, world)
+
 # all points are in polygons. I need to find a way to project the coasts a little inland 
+# reduce size shapefile xx km inland
 
 pdf(paste("../maps/unfiltered",query,"FROM",startUploadDate,"TO",endUploadDate,"global.pdf",sep=""))
 maps::map("worldHires",fill=TRUE)

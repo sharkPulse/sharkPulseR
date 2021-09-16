@@ -2,6 +2,7 @@
 
 export(connectPelagic)
 export(csv2html)
+export(flickr2html)
 export(flickrFilter)
 export(getFlickrImages)
 export(getSharkPulse)

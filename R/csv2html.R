@@ -1,16 +1,19 @@
 #' Convert csv from \code{getFlickrImages} to html Format
 #'
-#' @param csvFile file from  \code{getFlickrImages}. This csv file is usually stored in the \code{py} foldere and called \code{output.csv}.
+#' @param dat dataset output from fliskr.search
+#' @param csvFile file from  \code{getFlickrImages}. This csv file is usually stored in the \code{py} foldere and called \code{output.csv}. it has to have headers in the form of lon, lat, datetaken, dateupload, url. (csvFile = "output.csv")
 #' @param htmlFile output htm file 
 #' @export
-csv2html = function(csvFile = "output.csv", htmlFile = "mypage.html"){
+csv2html = function(dat = dat, csvFile = NULL, htmlFile = "mypage.html"){
 
-ocean = read.csv(csvFile)
+if(!is.null(csvFile)){ 
+		dat = read.csv(csvFile)
+		names(dat) = c("latitude","longitude","datetaken","url")
+}
 
-outline = with(dat,paste("<tr><td>",lon,
-				"</td><td>",lat,
+outline = with(dat,paste("<tr><td>",longitude,
+				"</td><td>",latitude,
 				"</td><td>",datetaken,
-				"</td><td>",dateupload,
 				"</td><td><img src=",url," width = 300></td></tr>",sep=""))
 
 # ctreates html page
@@ -24,7 +27,6 @@ cat("<html>
 						<th>Lat</th>
 						<th>Lon</th>
 						<th>Date</th>
-						<th>Date Upload</th>
 						<th>Img</th>
 					</tr>")
 cat(paste(outline,"\n",sep=""))
@@ -69,3 +71,19 @@ sink()
 datIds = data.frame(id = dat$id, species= "")
 write.csv(datIds, "../data/toConfirm.csv", row.names = F)
 }
+
+#' Create html table from flickr.search function
+#'
+#' @param dat data.frame of pre-validated pictures. There three columns: Species, ID, Img.
+#' @export
+flickr2html = function(dat){
+
+require(kableExtra)
+dat %>%
+  kbl(booktabs = T) %>%
+  kable_paper(full_width = F) %>%
+  column_spec(24, image = dat$url_m) %>%
+  save_kable(file = "table1.html", self_contained = T)
+ # it works
+ }
+
