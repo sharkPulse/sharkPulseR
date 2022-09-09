@@ -1,11 +1,14 @@
-require(DBI)
-require(RPostgreSQL)
-require(RH2)
+#' Flickr Dredge to csv
+#'
+#' @param con connection object
+#' @export
+Flickr_toData = function(con){
+#require(DBI)
+#require(RPostgreSQL)
+#require(RH2)
 require(dplyr)
 require(googlesheets4)
-source("connectPelagicB3.R")
-
-con = connectPelagic()
+#source("connectPelagicVT.R")
 
 dm = fetch(dbSendQuery(con, statement = paste("select * from data_mining;",sep="")), n=-1)
 #gs = read.csv('../data/flickrDregdeCommonNames.csv')
@@ -52,5 +55,5 @@ nd$imageRender = paste("=IMAGE(\"",nd$url_m,"\")", sep = "")
 write.csv(new_dat, '../../s/predictor/dredge1.csv', row.names = F)
 
 # system(paste('python ../../s/predictor/identifier.py'))
-
+}
 
