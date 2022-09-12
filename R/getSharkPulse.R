@@ -8,6 +8,7 @@ getSharkPulse = function(dbuser, dbpass){
 	con = connectPelagic(dbuser, dbpass)
 	dat = dbSendQuery(con, statement = paste("select * from sharkpulse;",sep=""))
 	dat = fetch(dat, n = -1) # gets the index of abundance
+	dbDisconnect(con)
 	dat
 }	
 
