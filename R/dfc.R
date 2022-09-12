@@ -23,7 +23,7 @@ dfc = function(dat, sample = TRUE, nsamples = 50){
 	coast.moll <- spTransform(coast,CRS(mollweide))
 	point.moll <- spTransform(sp.points,CRS(mollweide))
 
-if (sample) test   <- sample(1:length(sp.points),500) else test =  1:length(sp.points)
+if (sample) test   <- sample(1:length(sp.points),nsamples) else test =  1:length(sp.points)
 	result <- sapply(test,function(i)gDistance(point.moll[i],coast.moll))/1000 # distance in km
 	cbind(dat[test,],distance = result)
 }

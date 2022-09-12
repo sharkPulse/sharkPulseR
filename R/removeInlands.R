@@ -12,14 +12,14 @@ removeInlands = function(dat, buffer = 10){
   world <- ne_countries(scale = 50, returnclass = "sf")
   world <- st_transform(world, 4326)
 
-  pts <- photos %>%
+  pts <- dat %>%
     sf::st_as_sf(coords = c("longitude", "latitude")) 
   st_crs(pts) <- 4326
   pts_on_land <- st_intersection(pts, world)
   # leave points within buffer km from coast
   pts_on_land = pts_on_land[pts_on_land$distance>buffer,]
 
-  ph.oce = photos[!photos$url_m %in% pts_on_land$url_m,] # photos in ocean
+  ph.oce = dat[!dat$url_m %in% pts_on_land$url_m,] # photos in ocean
   ph.oce
 
 }

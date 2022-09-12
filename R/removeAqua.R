@@ -15,7 +15,7 @@ removeAqua = function(aquaria = aqua, records = dat){
 	# this is for converting the coordinate system to metric from degrees
 	aqua.moll <- st_transform(aqua,CRS(mollweide))
 	aqua_buffer = sf::st_buffer(aqua.moll, 1000) # create a 1 km buffer around the points
-	pictures.sp = sf::st_as_sf(photos, coords = c("longitude","latitude"), crs = sf::st_crs(world))
+	pictures.sp = sf::st_as_sf(records, coords = c("longitude","latitude"), crs = sf::st_crs(world))
 	pic.moll <- st_transform(pictures.sp,CRS(mollweide))
 	test = sf::st_contains(pic.moll, aqua_buffer, sparse = FALSE)
 # it returns a matrix of logical values. these are whether any x (pictures) is within any y polygon (aquarium buffers)
