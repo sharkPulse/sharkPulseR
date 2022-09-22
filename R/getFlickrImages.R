@@ -11,9 +11,9 @@ getFlickrImages = function(text, geoBox = "-180,-90,180,90"){
  	api_key = "7bf4ce840f517255cce4295b2c753b63"
 	photos <- flickr.photos.search(api_key = api_key, geoBox = geoBox, text = text, .allpages = TRUE)
     if(nrow(photos) == 0 ) stop 
-  datt = photos[,c("datetaken","latitude","longitude","url_m","id","owner")]
-  datt$flickr_url = paste("http://flickr.com/photos/",datt$owner,"/",datt$id, sep = "")
-  datt$imageRender = paste("=IMAGE(\"",datt$url_m,"\")", sep = "")
-  datt
+  #datt = photos[,c("datetaken","latitude","longitude","url_m","id","owner")] # I do not need to remove the other fields
+  photos$flickr_url = paste("http://flickr.com/photos/",photos$owner,"/",photos$id, sep = "")
+  photos$imageRender = paste("=IMAGE(\"",photos$url_m,"\")", sep = "")
+  photos
 
 }
