@@ -72,18 +72,5 @@ datIds = data.frame(id = dat$id, species= "")
 write.csv(datIds, "../data/toConfirm.csv", row.names = F)
 }
 
-#' Create html table from flickr.search function
-#'
-#' @param dat data.frame of pre-validated pictures. There three columns: Species, ID, Img.
-#' @export
-flickr2html = function(dat){
 
-require(kableExtra)
-dat %>%
-  kbl(booktabs = T) %>%
-  kable_paper(full_width = F) %>%
-  column_spec(24, image = dat$url_m) %>%
-  save_kable(file = "table1.html", self_contained = T)
- # it works
- }
 

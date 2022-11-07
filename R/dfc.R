@@ -17,6 +17,7 @@ dfc = function(dat, sample = TRUE, nsamples = 50){
 	mollweide <- "+proj=moll +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"
 
 	dat = subset(dat, !is.na(latitude)) # there should not be na coordinates
+	#dat = subset(dat, !is.na(longitude)) # there should not be na coordinates
 	sp.points <- SpatialPoints(dat[,c("longitude","latitude")], proj4string=CRS(wgs.84))
 
 	coast  <- readOGR(dsn="../data/ne_10m_coastline/",layer="ne_10m_coastline",p4s=wgs.84) # shapefiles are in data and dowlodaded here http://www.naturalearthdata.com/downloads/10m-physical-vectors/10m-coastline/

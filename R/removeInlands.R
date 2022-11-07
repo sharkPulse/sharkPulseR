@@ -19,7 +19,7 @@ removeInlands = function(dat, buffer = 10){
   # leave points within buffer km from coast
   pts_on_land = pts_on_land[pts_on_land$distance>buffer,]
 
-  ph.oce = dat[!dat$url_m %in% pts_on_land$url_m,] # photos in ocean
+  ph.oce = dat[!dat$url %in% pts_on_land$url,] # photos in ocean
   ph.oce
 
 }
