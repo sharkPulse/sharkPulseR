@@ -19,7 +19,7 @@ removeAqua = function(aquaria = aqua, records = dat){
 	#pictures.sp = sf::st_as_sf(records, coords = c("longitude","latitude"), crs = sf::st_crs(world))
 	pic.moll = sf::st_as_sf(records, coords = c("longitude","latitude"), crs = CRS(mollweide))
 	#pic.moll <- st_transform(pictures.sp,CRS(mollweide))
-	test = sf::st_contains(pic.moll, aqua_buffer, sparse = FALSE)
+	test = sf::st_intersects(pic.moll, aqua_buffer, sparse = FALSE)
 # it returns a matrix of logical values. these are whether any x (pictures) is within any y polygon (aquarium buffers)
 # remove those that are true
 	inaqua = rowSums(test) # this finds the pictures in aquaria (which rows have at least one TRUE case)
