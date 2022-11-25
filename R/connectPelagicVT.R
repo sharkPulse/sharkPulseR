@@ -13,7 +13,8 @@ connectPelagic = function(dbuser, dbpass){
   require(RPostgreSQL)
   require(RH2) 	
   	dbname = "pelagic"
-  	dbhost <- "sharkpulse.cnre.vt.edu"
+  	#dbhost <- "sharkpulse.cnre.vt.edu"
+    dbhost <- "sp2.cs.vt.edu"
   	dbport <- 5432
   	drv <- dbDriver("PostgreSQL") 
   	con <- dbConnect(drv, host=dbhost, port=dbport, dbname=dbname,  user=dbuser, password=dbpass
