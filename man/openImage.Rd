@@ -4,11 +4,14 @@
 \alias{openImage}
 \title{Open image from the sarkPulse archive}
 \usage{
-openImage(img_name, baselineUser = "francesco")
+openImage(img_name, srvUser = "francesco")
 }
 \arguments{
 \item{img_name}{name of teh image to open}
+
+\item{srvUser}{username in the remote server}
 }
 \description{
-this function require an image name as indicated in the sharkPulse table. Use selectData to get the image names of desired data.
+this function require an image name as indicated in the sharkPulse table and the training table. Use selectData to get the image names of desired data.
+To work, you need to be able to access the remote server without password
 }
