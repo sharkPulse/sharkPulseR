@@ -1,7 +1,7 @@
-#' Get the entire sharkPulse table
+#' Get the instagram table
 #'
-#' @param dbuser sCPUEdb user with privileges to access the sharkpulse table
-#' @param dbpass sCPUEdb password for user with privileges to access the sharkpulse table
+#' @param dbuser user with privileges to access the instagram table
+#' @param dbpass password for user with privileges to access the instagram table
 #' @export
 
 getInstagram = function(dbuser, dbpass){
