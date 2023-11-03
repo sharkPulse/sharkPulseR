@@ -5,7 +5,8 @@ Authors@R: person("Francesco", "Ferretti", email = "ferretti@vt.edu", role = c("
 Author: Francesco Ferretti [aut, cre]
 Maintainer: Francesco Ferretti <ferretti@vt.edu>
 Description: Scripts to manipulate, extract, visualize and analyze sharkPulse data
-Depends: R (>= 3.3.1)
+Depends: R (>= 3.3.1),
+	maptools
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true

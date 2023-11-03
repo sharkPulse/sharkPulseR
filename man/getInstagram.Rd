@@ -2,15 +2,15 @@
 % Please edit documentation in R/getInstagram.R
 \name{getInstagram}
 \alias{getInstagram}
-\title{Get the entire sharkPulse table}
+\title{Get the instagram table}
 \usage{
 getInstagram(dbuser, dbpass)
 }
 \arguments{
-\item{dbuser}{sCPUEdb user with privileges to access the sharkpulse table}
+\item{dbuser}{user with privileges to access the instagram table}
 
-\item{dbpass}{sCPUEdb password for user with privileges to access the sharkpulse table}
+\item{dbpass}{password for user with privileges to access the instagram table}
 }
 \description{
-Get the entire sharkPulse table
+Get the instagram table
 }
