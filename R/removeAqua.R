@@ -7,7 +7,7 @@
 removeAqua = function(aquaria = aqua, records = dat){
 
 	require(sharkPulseR)
-	require(sCPUEdb)
+	#require(sCPUEdb)
 	
 	#world<-sf::st_read("../maps/worldLand") # shape file for all countries in the world
 	#	aqua = sf::st_as_sf(aqua, coords = c("longitude","latitude"), crs = sf::st_crs(world)) # this comes from  the database
@@ -19,10 +19,47 @@ removeAqua = function(aquaria = aqua, records = dat){
 	#pictures.sp = sf::st_as_sf(records, coords = c("longitude","latitude"), crs = sf::st_crs(world))
 	pic.moll = sf::st_as_sf(records, coords = c("longitude","latitude"), crs = CRS(mollweide))
 	#pic.moll <- st_transform(pictures.sp,CRS(mollweide))
-	test = sf::st_intersects(pic.moll, aqua_buffer, sparse = FALSE)
+	#test = sf::st_contains(pic.moll, aqua_buffer, sparse = FALSE)
+	test = st_intersects(pic.moll, aqua_buffer, sparse = FALSE)
 # it returns a matrix of logical values. these are whether any x (pictures) is within any y polygon (aquarium buffers)
 # remove those that are true
 	inaqua = rowSums(test) # this finds the pictures in aquaria (which rows have at least one TRUE case)
 	records = records[inaqua==0,]
 	records # it returns the filtered photo dataset
+}
+
+
+#' Remove records close to aquaria
+#'
+#' The function will filter records by removing those close to aquaria
+#' @param aquaria location data of aquaria
+#' @param records location data of records
+#' @param max_distance_km distance in kilometers
+#' @export 
+removeAqua2 = function(aquaria = aqua, records = dat, max_distance_km = 1){
+
+# Load the required packages
+library(geosphere)
+
+
+calculate_distances <- function(set1, set2) {
+  distances <- matrix(0, nrow = nrow(set1), ncol = nrow(set2))
+
+  for (i in 1:nrow(set1)) {
+    for (j in 1:nrow(set2)) {
+      distances[i, j] <- distVincentySphere(
+        set1[i, c("longitude", "latitude")],
+        set2[j, c("longitude", "latitude")]
+      )
+    }
+  }
+  distances
+}
+  
+dist_matrix <- calculate_distances(set1 = records, set2 = aqua)
+
+inaqua.id = which(dist_matrix < 1000*max_distance_km, arr.ind = TRUE)[,1] #these are the rows with distance withing aquarium threshold
+filtered_points = records[-inaqua.id,]
+
+filtered_points
 }
