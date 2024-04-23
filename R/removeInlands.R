@@ -36,7 +36,7 @@ removeInlands = function(dat, buffer = 10){
 
   # Create 'inland' column: TRUE if not within buffered zone, FALSE otherwise
   dat$inland <- apply(pts_within_buffer, 1, any)
-
+  dat$buffer <- buffer
   return(dat)
 }
 
