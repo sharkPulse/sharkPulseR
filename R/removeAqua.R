@@ -63,3 +63,57 @@ filtered_points = records[-inaqua.id,]
 
 filtered_points
 }
+
+
+#' Remove records close to aquaria - parellelized function
+#'
+#' The function will filter records by removing those close to aquaria
+#' @param aquaria location data of aquaria
+#' @param records location data of records
+#' @param max_distance_km distance in kilometers
+#' @export 
+removeAquaPar <- function(aquaria = aqua, records = dat, max_distance_km = 1) {
+  # Install and load required packages if not already installed
+  # install.packages(c("geosphere", "foreach", "doParallel"))
+  library(geosphere)
+  library(foreach)
+  library(doParallel)
+
+  # Set the number of cores you want to use
+  num_cores <- 4  # Change this to the desired number of cores
+
+  # Register parallel backend
+  cl <- makeCluster(num_cores)
+  registerDoParallel(cl)
+
+  calculate_distances_parallel <- function(set1, set2) {
+    distances <- foreach(i = 1:nrow(set1), .combine = 'cbind') %dopar% {
+      dists <- foreach(j = 1:nrow(set2), .combine = 'c') %dopar% {
+        distVincentySphere(
+          set1[i, c("longitude", "latitude")],
+          set2[j, c("longitude", "latitude")]
+        )
+      }
+      return(dists)
+    }
+
+    matrix(unlist(distances), nrow = nrow(set1), ncol = nrow(set2))
+  }
+
+  distances_parallel <- calculate_distances_parallel(set1 = records, set2 = aquaria)
+
+  # Stop the parallel backend
+  stopCluster(cl)
+
+  inaqua.id <- which(distances_parallel < 1000 * max_distance_km, arr.ind = TRUE)[, 1]
+  # These are the rows with distance within the aquarium threshold
+  filtered_points <- records[-inaqua.id,]
+
+  return(filtered_points)
+}
+
+
+
+
+
+
