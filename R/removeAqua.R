@@ -36,32 +36,34 @@ removeAqua = function(aquaria = aqua, records = dat){
 #' @param records location data of records
 #' @param max_distance_km distance in kilometers
 #' @export 
-removeAqua2 = function(aquaria = aqua, records = dat, max_distance_km = 1){
+removeAqua2 <- function(aquaria, dat, max_distance_km = 1){
 
-# Load the required packages
-library(geosphere)
+  library(geosphere)
 
-
-calculate_distances <- function(set1, set2) {
-  distances <- matrix(0, nrow = nrow(set1), ncol = nrow(set2))
-
-  for (i in 1:nrow(set1)) {
-    for (j in 1:nrow(set2)) {
-      distances[i, j] <- distVincentySphere(
-        set1[i, c("longitude", "latitude")],
-        set2[j, c("longitude", "latitude")]
-      )
+  # Calculate distances between each record and each aquarium
+  calculate_distances <- function(set1, set2) {
+    distances <- matrix(0, nrow = nrow(set1), ncol = nrow(set2))
+    for (i in 1:nrow(set1)) {
+      for (j in 1:nrow(set2)) {
+        distances[i, j] <- distVincentySphere(
+          set1[i, c("longitude", "latitude")],
+          set2[j, c("longitude", "latitude")]
+        )
+      }
     }
+    distances
   }
-  distances
-}
-  
-dist_matrix <- calculate_distances(set1 = records, set2 = aqua)
 
-inaqua.id = which(dist_matrix < 1000*max_distance_km, arr.ind = TRUE)[,1] #these are the rows with distance withing aquarium threshold
-filtered_points = records[-inaqua.id,]
+  # Generate the distance matrix
+  dist_matrix <- calculate_distances(set1 = dat, set2 = aquaria)
 
-filtered_points
+  # Determine proximity to any aquarium
+  is_near_aquarium <- apply(dist_matrix, 1, function(row) any(row < 1000 * max_distance_km))
+
+  # Add the 'aquarium' column to the records dataframe
+  dat$aquarium <- is_near_aquarium
+
+  return(dat)
 }
 
 
