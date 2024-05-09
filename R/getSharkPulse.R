@@ -36,6 +36,7 @@ getSharkPulse = function(dbuser, dbpass){
 	query5 <- "select common_name_cs as common_name, species_name_cs as species_name, datetaken as date, latitude, longitude, '' as location, img_name, 'Flickr' as source from flickr_new fn where validated='t' and latitude is not null and species_name_cs!='' and not exists (select 1 from flickr f where fn.url_m = f.img_name)"
 	flickr_new <- dbGetQuery(con, query5)
 	flickr_new$date = as.Date(ymd_hms(flickr_new$date))
+	flickr_new$source_type = "Flickr"
 	
 	# Combine data from different sources into one dataframe
 	dat <- rbind(sharkpulse, flickr, flickr_new, inat, instagram)
