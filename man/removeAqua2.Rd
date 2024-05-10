@@ -4,14 +4,14 @@
 \alias{removeAqua2}
 \title{Remove records close to aquaria}
 \usage{
-removeAqua2(aquaria = aqua, records = dat, max_distance_km = 1)
+removeAqua2(aquaria, dat, max_distance_km = 1)
 }
 \arguments{
 \item{aquaria}{location data of aquaria}
 
-\item{records}{location data of records}
-
 \item{max_distance_km}{distance in kilometers}
+
+\item{records}{location data of records}
 }
 \description{
 The function will filter records by removing those close to aquaria
