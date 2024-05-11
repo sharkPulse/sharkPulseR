@@ -10,6 +10,7 @@ sanitizeTaxonomy = function(dat){
 	dat$species_name <- gsub("(\\S+) (\\S+)", "\\1 \\L\\2", dat$species_name, perl = TRUE) # lowercase 1st letter of second name
 	dat$species_name <- sub("family\\b", "", dat$species_name) # remove the word family - it is obvious when a word is a family name because it ends with idae 
 	dat$species_name = trimws(dat$species_name) # remove leading and trailing space
+	dat$species_name <- gsub("\\s*\\(.*?\\)", "", dat$species_name) # remove parentheses and text within, e.g. "Rhincodon typus (whale shark)"
 	# when the species_name is one word it can be:
 	# a family if it ends in idae
 	# an order if it ends in ormes
