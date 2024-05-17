@@ -15,7 +15,7 @@ getSharkPulseMonitor = function(dbuser, dbpass){
 #	dat
 
 	# Sharkpulse
-	query1 <- "SELECT common_name, species_name, latitude, longitude, date, location, img_name, source, source_type FROM sharkpulse WHERE latitude IS NOT NULL AND validated='t' AND species_name IS NOT NULL;"
+	query1 <- "SELECT common_name, species_name, latitude, longitude, date, location, img_name, source FROM sharkpulse WHERE latitude IS NOT NULL AND validated='t' AND species_name IS NOT NULL;"
 	sharkpulse <- dbGetQuery(con, query1)
 
 	# Flickr
