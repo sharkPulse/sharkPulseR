@@ -55,7 +55,7 @@ getSharkPulseMonitor = function(dbuser, dbpass){
 	colnames(dat) <- c("common_name", "species_name", "latitude", "longitude", "date", "location", "img_name", "source","source_type", "table")
 	
 	shark <- dat %>%
-		join(taxonomy_mapping, by = c("species_name" = "species_name"))
+		semi_join(taxonomy_mapping, by = c("species_name" = "species_name"))
 	# Step 4: Close the database connection
 	# dbDisconnect(con)
 
@@ -66,9 +66,9 @@ getSharkPulseMonitor = function(dbuser, dbpass){
 	shark$common_name = factor(shark$common_name)
 
 	shark <- shark %>%
-	mutate(full_img_path = paste0("www/", img_name)) %>%
-	filter(sapply(full_img_path, file.exists)) %>%
-	select(-full_img_path)  # Optionally, remove the full_img_path column if it's no longer needed
+        mutate(full_img_path = paste0("www/", img_name)) %>%
+        filter(sapply(full_img_path, file.exists)) %>%
+        select(-full_img_path)  # Optionally, remove the full_img_path column if it's no longer needed
 
 	dbDisconnect(con)
 	shark 
