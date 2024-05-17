@@ -71,7 +71,11 @@ subSharkPulse = function(dbuser, dbpass, csvfile){
 	dat
 }	
 
-
+#' Substitute the entire sharkPulse table
+#'
+#' @param dbuser sCPUEdb user with privileges to access the sharkpulse table
+#' @param dbpass sCPUEdb password for user with privileges to access the sharkpulse table
+#' @export
 getSharkPulseMonitor = function(dbuser, dbpass){
 	#require(sCPUEdb)
 	require(lubridate)
