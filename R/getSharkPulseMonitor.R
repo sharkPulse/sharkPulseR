@@ -1,11 +1,13 @@
-#' Get the entire sharkPulse table
+
+#' Retrieve pulse monitor
 #'
-#' @param dbuser sCPUEdb user with privileges to access the sharkpulse table
-#' @param dbpass sCPUEdb password for user with privileges to access the sharkpulse table
+#' @param dbuser sp user with privileges to access the sharkpulse table
+#' @param dbpass sp password for user with privileges to access the sharkpulse table
 #' @export
-getSharkPulse = function(dbuser, dbpass){
+getSharkPulseMonitor = function(dbuser, dbpass){
 	#require(sCPUEdb)
 	require(lubridate)
+	require(dplyr)
 	con = connectPelagic(dbuser, dbpass)
 #	dat = dbSendQuery(con, statement = paste("select * from sharkpulse;",sep=""))
 #	dat = fetch(dat, n = -1) # gets the index of abundance
@@ -43,30 +45,31 @@ getSharkPulse = function(dbuser, dbpass){
 	flickr_new$source_type = "Flickr"
 	flickr_new$table = "flickr_new"
 	
+	# Retrieve mapping from taxonomy3
+	taxonomy_query <- "SELECT valid AS species_name, main_common_name FROM taxonomy3;"
+	taxonomy_mapping <- dbGetQuery(con, taxonomy_query)
+
 	# Combine data from different sources into one dataframe
 	dat <- rbind(sharkpulse, flickr, flickr_new, inat, instagram)
 	# Ensure column names are consistent across dataframes
 	colnames(dat) <- c("common_name", "species_name", "latitude", "longitude", "date", "location", "img_name", "source","source_type", "table")
+	
+	shark <- dat %>%
+		join(taxonomy_mapping, by = c("species_name" = "species_name"))
+	# Step 4: Close the database connection
+	# dbDisconnect(con)
+
+	shark$img_name = ifelse((grepl('\\.', shark$img_name) & !grepl('http', shark$img_name)), paste0("www/",shark$img_name), shark$img_name)
+	shark$img_name = ifelse((!is.na(shark$img_name) & !grepl('http', shark$img_name) & !grepl('\\.', shark$img_name)), 
+			paste0("www/",shark$img_name, ".jpg"), shark$img_name)
+	shark$species_name = factor(shark$species_name)
+	shark$common_name = factor(shark$common_name)
+
+	shark <- shark %>%
+	mutate(full_img_path = paste0("www/", img_name)) %>%
+	filter(sapply(full_img_path, file.exists)) %>%
+	select(-full_img_path)  # Optionally, remove the full_img_path column if it's no longer needed
+
 	dbDisconnect(con)
-	dat 
-
-}	
-
-
-#' Substitute the entire sharkPulse table
-#'
-#' @param dbuser sCPUEdb user with privileges to access the sharkpulse table
-#' @param dbpass sCPUEdb password for user with privileges to access the sharkpulse table
-#' @export
-subSharkPulse = function(dbuser, dbpass, csvfile){
-	#require(sCPUEdb)
-	con = connectPelagic(dbuser, dbpass)
-	dat = read.csv(csvfile)
-	dataHeaders = dbSendQuery(con, statement = "select * from sharkpulse limit 1;")
-	dataHeaders <- fetch(dataHeaders)
-	
-	dat = dat[, names(dataHeaders)]
-	
-	dbWriteTable(con, "sharkpulse", value=dat, overwrite = TRUE, row.names=FALSE)
-	dat
+	shark 
 }	
