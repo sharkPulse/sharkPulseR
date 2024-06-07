@@ -7,7 +7,7 @@
 openImage(img_name, srvUser = "francesco")
 }
 \arguments{
-\item{img_name}{name of teh image to open}
+\item{img_name}{name of the image to open}
 
 \item{srvUser}{username in the remote server}
 }
