@@ -24,7 +24,7 @@ getSharkPulse = function(dbuser, dbpass){
 	flickr$table = "flickr"
 
 	# iNaturalist
-	query3 <- "SELECT common_name, scientific_name AS species_name, datetime AS date, latitude, longitude, place_guess AS location, img_name, 'iNaturalist' AS source FROM inat WHERE latitude IS NOT NULL AND scientific_name IS NOT NULL;"
+	query3 <- "SELECT common_name, scientific_name AS species_name, datetime AS date, latitude, longitude, place_guess AS location, img_name, 'iNaturalist' AS source FROM inat WHERE latitude IS NOT NULL AND scientific_name IS NOT NULL AND quality_grade='research';"
 	inat <- dbGetQuery(con, query3)
 	inat$date <- as.Date(ymd_hms(inat$date))
 	inat$source_type = "iNaturalist"
