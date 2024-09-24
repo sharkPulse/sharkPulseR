@@ -1,0 +1,448 @@
+oQs
+Kopts = oQs/k1
+Kopts
+plot(Kopts/1000~deltas, type = "l", las = 1, ylab = "Optimum investment ($ million)", xlab = "Variability in Quota")
+plot(Kopts/1000~lsigmas, type = "l", las = 1, ylab = "Optimum investment ($ million)", xlab = "Variability in Quota")
+M <- 0.2  # Natural mortality (per year)
+K <- 0.5  # von Bertalanffy growth coefficient
+Linf <- 100  # Asymptotic length (cm)
+t0 <- -0.5  # Theoretical age at length zero
+r <- 0.05  # Discount rate
+price_per_unit <- 10  # Price per unit of fish
+Winf <- Linf^3 * 0.01  # Asymptotic weight using a weight-length relationship
+ages <- 1:10  # Age range of recruits (years)
+length_at_age <- function(age) {#
+  Linf * (1 - exp(-K * (age - t0)))#
+}
+weight_at_age <- function(length) {#
+  length^3 * 0.01#
+}
+Fs <- seq(0, 1, by = 0.01)  # Range of fishing mortalities to explore
+Fs
+YPR <- numeric(length(Fs))
+PVYPR <- numeric(length(Fs))
+YPr
+YPR
+for (i in 1:length(Fs)) {#
+  F <- Fs[i]#
+  total_yield <- numeric(length(ages))#
+  for (age in ages) {#
+    L <- length_at_age(age)#
+    W <- weight_at_age(L)#
+    # Calculate the survival rate to this age#
+    S <- exp(-(F + M) * (age - 1))#
+    # Fishing mortality at this age#
+    C <- F / (F + M) * (1 - exp(-(F + M))) * W#
+    total_yield[age] <- S * C#
+    # Discount this yield to present value#
+    PVYPR[i] <- PVYPR[i] + (total_yield[age] / ((1 + r) ^ age))#
+  }#
+  YPR[i] <- sum(total_yield)#
+}
+opt_index <- which.max(PVYPR)
+opt_index
+F_opt <- Fs[opt_index]
+F_opt
+plot(Fs, PVYPR, type = 'l', xlab = "Fishing Mortality (F)", ylab = "Present Value of YPR (PVYPR)",#
+     main = "PVYPR vs Fishing Mortality")
+abline(v = F_opt, col = "red", lty = 2)
+text(F_opt, max(PVYPR), labels = paste("Fopt =", round(F_opt, 2)), pos = 4)
+F
+F = 0.41
+total_yield <- numeric(length(ages))
+total_yield
+PVYPR
+cat("The optimal fishing mortality (Fopt) that maximizes PVYPR is:", F_opt, "\n")
+N0 = 100 # number of individual at age 1
+years = 1:10 # follow the cohort for 10 years
+Fi = 0.6 # fishing mortality
+M = 0.2 # natural mortality
+Z = Fi+M # total mortality
+Nt = c(N0,N0*exp(-(Fi+M)*years[1:9])) # calculate numbers in following ages assuming a exponential decay
+Nt
+plot(Nt~years, type = "l")
+W = c(0.6,0.9,2.1,4.1,6.3,8.4,10,11.2,12.6,13.5) # these are average weight at age
+Pb = Nt*W # Population biomass is found mutiplying average weight for number of individuals
+Cn = Cn = Fi/(Z)*Nt*(1-exp(-Z)) # catches in Numbers from the catch equation derived in box 7.2
+Cn
+Y = sum(Cw) # this is teh yield
+Cw = Cn*W # catch in biomass
+Cw
+Y = sum(Cw) # this is teh yield
+ages
+i = 1
+ages = 1
+F <- Fs[i]
+F
+i = 4
+F <- Fs[i]
+F
+L <- length_at_age(age)
+L
+W <- weight_at_age(L)
+W
+S <- exp(-(F + M) * (age - 1))
+S
+C <- F / (F + M) * (1 - exp(-(F + M))) * W
+C
+total_yield[age] <- S * C
+total_yield
+age
+PVYPR
+PVYPR <- numeric(length(Fs))
+PVYPR
+PVYPR[i] <- PVYPR[i] + (total_yield[age] / ((1 + r) ^ age))
+PVYPR
+YPR[i] <- sum(total_yield)
+YPR
+N0 = 100 # number of individual at age 1#
+years = 1:10 # follow the cohort for 10 years#
+Fi = 0.6 # fishing mortality#
+M = 0.2 # natural mortality#
+Z = Fi+M # total mortality#
+Nt = c(N0,N0*exp(-(Fi+M)*years[1:9])) # calculate numbers in following ages assuming a exponential decay#
+barplot(Nt~years)#
+plot(Nt~years, type = "l")#
+W = c(0.6,0.9,2.1,4.1,6.3,8.4,10,11.2,12.6,13.5) # these are average weight at age#
+#
+Pb = Nt*W # Population biomass is found mutiplying average weight for number of individuals#
+Cn = Cn = Fi/(Z)*Nt*(1-exp(-Z)) # catches in Numbers from the catch equation derived in box 7.2#
+Cw = Cn*W # catch in biomass#
+Y = sum(Cw) # this is teh yield#
+#
+# If we want to find the Yield per recruit#
+Y/100#
+# Biomass per recruit#
+sum(Pb)/100
+getYpR = function(Fi){#
+  N0 = 100#
+  years = 1:10#
+#
+  M = 0.2#
+  Z = Fi+M#
+  Nt = c(N0,N0*exp(-(Fi+M)*years[1:9]))#
+#
+W = c(0.6,0.9,2.1,4.1,6.3,8.4,10,11.2,12.6,13.5)#
+Pb = Nt*W # Population biomass#
+Cn = Cn = Fi/(Z)*Nt*(1-exp(-Z)) # catches in Numbers#
+Cw = Cn*W#
+Y = sum(Cw)#
+#
+# Yield per recruit#
+YpR = Y/100#
+# Biomass per recruit#
+BpR = sum(Pb)/100#
+c(YpR = YpR,BpR = BpR)#
+}
+Fis = seq(0,1,.1) # range of fishing mortality values #
+#
+dat = do.call(rbind, lapply(Fis, getYpR)) # apply the function to all elements of Fis and then combine the results in a table#
+dat = as.data.frame(dat) # we need to make sure this table is a data.frame#
+dat$Fi = Fis#
+#
+par(mar = c(5,5,2,5)) # set the margins for the plotting device#
+plot(YpR~Fi, dat, type = "l", axes = FALSE, ylab = "Yield per Recruit (kg)")#
+axis(1)#
+axis(2)#
+par(new = T) # allows overplotting on the same figure#
+plot(BpR~Fi, dat, type = "l", lty = 2, axes=FALSE, xlab=NA, ylab=NA, ylim = c(0,20)) # this is the dashed line#
+axis(side = 4)#
+mtext(4,line = 3 ,text = "Biomass per Recruit (kg)")#
+# best Fi#
+abline(v = dat$Fi[dat$YpR==max(dat$YpR)], lty = 2)
+lines(BpR~Fi, dat, lty = 2)
+getYpR = function(Fi, sel = 3){ # means selectivity at age three#
+  N0 = 100#
+  years = 1:10#
+  selected = c(rep(0,sel-1),rep(1,10-sel+1))#
+  M = 0.2#
+  Z = Fi*selected+M#
+  Nt = c(N0,N0*exp(-(Fi+M)*years[1:9]))#
+#
+W = c(0.6,0.9,2.1,4.1,6.3,8.4,10,11.2,12.6,13.5)#
+Pb = Nt*W # Population biomass#
+Cn = Cn = Fi/(Z)*Nt*(1-exp(-Z)) # catches in Numbers#
+Cw = Cn*W#
+Y = sum(Cw)#
+#
+# Yield per recruit#
+YpR = Y/100#
+# Biomass per recruit#
+BpR = sum(Pb)/100#
+c(YpR = YpR,BpR = BpR)#
+}
+Fis = seq(0,2,.1) # range of fishing mortality values #
+sels = seq(1,10,1) # range of selectivities #
+#
+out = matrix(0,ncol = length(Fis), nrow = length(sels))#
+rownames(out) = sels#
+colnames(out) = Fis#
+for (i in 1:length(Fis)){#
+  for (j in 1:length(sels)){#
+#
+    out[j,i] = getYpR(Fi = Fis[i], sel = sels[j])[1]#
+  }#
+}
+contour(x = sels, y = Fis, z = out, ylab = "Fishing Mortality", xlab = "Selectivity", main = "Contour Plot of YpR")
+plot(x = colnames(out), out[1,], type = "b", ylim = c(0, max(out)))
+lines(x = colnames(out), out[2,], type = "b")
+lines(x = colnames(out), out[3,], type = "b")
+lines(x = colnames(out), out[4,], type = "b")
+plot(x = colnames(out), out[1,], type = "b", ylim = c(0, max(out)))#
+lines(x = colnames(out), out[2,], type = "b")#
+lines(x = colnames(out), out[3,], type = "b")#
+lines(x = colnames(out), out[4,], type = "b")#
+lines(x = colnames(out), out[5,], type = "b")#
+lines(x = colnames(out), out[6,], type = "b")#
+lines(x = colnames(out), out[7,], type = "b")#
+lines(x = colnames(out), out[8,], type = "b")#
+lines(x = colnames(out), out[9,], type = "b")#
+lines(x = colnames(out), out[10,], type = "b")
+getYpR = function(Fi){#
+  N0 = 100#
+  years = 1:10#
+#
+  M = 0.2#
+  Z = Fi+M#
+  Nt = c(N0,N0*exp(-(Fi+M)*years[1:9]))#
+#
+W = c(0.6,0.9,2.1,4.1,6.3,8.4,10,11.2,12.6,13.5)#
+Pb = Nt*W # Population biomass#
+Cn = Cn = Fi/(Z)*Nt*(1-exp(-Z)) # catches in Numbers#
+Cw = Cn*W#
+Y = sum(Cw)#
+#
+# Yield per recruit#
+YpR = Y/100#
+# Biomass per recruit#
+BpR = sum(Pb)/100#
+c(YpR = YpR,BpR = BpR)#
+}  #
+Fis = seq(0,1,.1) # range of fishing mortality values #
+#
+dat = do.call(rbind, lapply(Fis, getYpR)) # apply the function to all elements of Fis and then combine the results in a table#
+dat = as.data.frame(dat) # we need to make sure this table is a data.frame#
+dat$Fi = Fis#
+#
+par(mar = c(5,5,2,5)) # set the margins for the plotting device#
+plot(YpR~Fi, dat, type = "l", axes = FALSE, ylab = "Yield per Recruit (kg)")#
+axis(1)#
+axis(2)#
+par(new = T) # allows overplotting on the same figure#
+plot(BpR~Fi, dat, type = "l", lty = 2, axes=FALSE, xlab=NA, ylab=NA, ylim = c(0,20)) # this is the dashed line#
+axis(side = 4)#
+mtext(4,line = 3 ,text = "Biomass per Recruit (kg)")#
+# best Fi#
+abline(v = dat$Fi[dat$YpR==max(dat$YpR)], lty = 2)
+Cw
+Cw*10
+Cw*10/(((1 + 0.05) ^ (1:10)))
+barplot(Cw)
+barplot(Cw*10/(((1 + 0.05) ^ (1:10))))
+Fis = seq(0,1,.1) # range of fishing mortality values
+dat = do.call(rbind, lapply(Fis, getYpR)) # apply the function to all elements of Fis and then combine the results in a table
+dat
+dat = as.data.frame(dat) # we need to make sure this table is a data.frame
+dat$Fi = Fis
+dat
+1/0.05
+FcC
+0.025/7
+0.025/7*1000
+120/()(1+0.05)^5)
+120/((1+0.05)^5)
+20/1000000
+exp(7.392)
+distq = rlnorm(100, lmu, lsigma) # distribution of the quota
+distq
+hist(distq)
+FcC = 1 - (delta+m)/(p*k1-cy*k1)
+FcC
+oQ = qlnorm(0.3, lmu, lsigma) # so if the probabilitry that the quota would be less than the optimal quota is 0.3 then the optiomal quota is 1,374,000 tonnes
+oQ
+Kopt = oQ/k1 # which is 384,627,000$
+Kopt
+deltas = seq(0.025,0.1,0.001)
+deltas
+FcCs = 1 - (deltas+m)/(p*k1-cy*k1)
+FcCs
+oQs = qlnorm(FcCs, lmu, lsigma)
+oQs
+plot(Kopts/1000~deltas, type = "l", las = 1, ylab = "Optimum investment ($ million)")
+Kopts
+deltas
+plot(Kopts/1000~deltas[1:61], type = "l", las = 1, ylab = "Optimum investment ($ million)")
+lsigmas = seq(0,0.6,0.01)
+lsigmas
+oQs = qlnorm(FcC, lmu, lsigmas)
+oQs
+Kopts = oQs/k1
+plot(Kopts/1000~lsigmas, type = "l", las = 1, ylab = "Optimum investment ($ million)", xlab = "Variability in Quota") # as vaiability increases then
+par(mfrow = c(1,2))
+deltas = seq(0.025,0.1,0.001)#
+FcCs = 1 - (deltas+m)/(p*k1-cy*k1)#
+oQs = qlnorm(FcCs, lmu, lsigma)#
+Kopts = oQs/k1#
+#
+plot(Kopts/1000~deltas[1:61], type = "l", las = 1, ylab = "Optimum investment ($ million)")
+lsigmas = seq(0,0.6,0.01)#
+oQs = qlnorm(FcC, lmu, lsigmas)#
+Kopts = oQs/k1#
+#
+plot(Kopts/1000~lsigmas, type = "l", las = 1, ylab = "Optimum investment ($ million)", xlab = "Variability in Quota") # as vaiability increases then
+par(mfrow = c(1,2))
+deltas = seq(0.025,0.1,0.001)
+FcCs = 1 - (deltas+m)/(p*k1-cy*k1)
+oQs = qlnorm(FcCs, lmu, lsigma)
+Kopts = oQs/k1
+plot(Kopts/1000~deltas[1:61], type = "l", las = 1, ylab = "Optimum investment ($ million)")
+deltas
+Kopts
+plot(Kopts/1000~deltas, type = "l", las = 1, ylab = "Optimum investment ($ million)")
+lsigmas = seq(0,0.6,0.01)#
+oQs = qlnorm(FcC, lmu, lsigmas)#
+Kopts = oQs/k1#
+#
+plot(Kopts/1000~lsigmas, type = "l", las = 1, ylab = "Optimum investment ($ million)", xlab = "Variability in Quota") # as vaiability increases then
+FcC
+lsigmas = seq(0,0.6,0.01)
+oQs = qlnorm(FcC, lmu, lsigmas)
+Kopts = oQs/k1
+Kopts
+97/9*12
+130/12
+31/3
+connectKennedy = function (dbuser, dbpass) #
+{#
+    require(RPostgreSQL)#
+    require(RH2)#
+    dbname = "kennedylakes"#
+    dbhost <- "sp2.cs.vt.edu"#
+    dbport <- 5432#
+    drv <- dbDriver("PostgreSQL")#
+    con <- dbConnect(drv, host = dbhost, port = dbport, dbname = dbname, #
+        user = dbuser, password = dbpass)#
+}
+con = connectKennedy("francesco","pelagicMaster")
+install.packages(c("RPostgreSQL","RH2"))
+con = connectKennedy("francesco","pelagicMaster")
+install.packages(c("rJava"))
+con = connectKennedy("francesco","pelagicMaster")
+require("rJava")
+install.packages("rJava")
+library(rJava)
+30/169
+require("readxl")
+dat = read_excel("~/VTech/Admin/masterBudgetLab.xlsx")
+dat = as.data.frame(dat)
+head(dat)
+bf = subset(dat, project =="Bertarelli IUU project")
+bf
+bf = subset(dat, project =="Bertarelli IUU project" & fund_number =="453227")
+head(bf)
+sum(bf$expenses)
+6800+2482
+14144+5171
+19315+9282
+4.9/8.1
+300+800+1600
+119*2*0.5
+3.5*54
+3.5*60
+3.5*58
+3.5*56
+3.5*57
+15*5*8*4
+15*8*5*4
+15*8*5*4*3
+1793/2
+8*5*4
+8*7*4
+160*2
+150*12
+342*12
+12*3+12+12+12
+72-24
+160*8
+160*4
+524*12
+80*500
+80*500/1000
+20000/80
+250*20
+50*12
+50*12*2
+52*1.2
+5000/1440
+5000/1440*10
+5000/1440
+102421*1.04
+102421*1.05
+102421*1.08
+210438+69990
+205458+68334
+100/6
+18+20+36
+49556+4857
+(49556+4857)/12
+(49556+4857)/12*6
+(49556+4857)/12*5
+3/12
+12-8
+install.packages("ggplot2")#
+install.packages("ggtree")#
+install.packages("treeio")#
+install.packages("dplyr")
+library(ggplot2)#
+library(ggtree)#
+library(treeio)#
+library(dplyr)
+install.packages("ggtree")#
+install.packages("treeio")
+if (!requireNamespace("BiocManager", quietly = TRUE))#
+    install.packages("BiocManager")#
+#
+BiocManager::install("ggtree")#
+BiocManager::install("treeio")
+library(ggplot2)#
+library(ggtree)#
+library(treeio)#
+library(dplyr)
+tree <- read.tree("path_to_tree_file.newick")#
+#
+# Load metadata (assuming a CSV with columns: species, genus, family, order, status)#
+data <- read.csv("path_to_data_file.csv")#
+#
+# Merge tree with data#
+tree_data <- full_join(tree, data, by = "species")
+library(ggplot2)
+data <- data.frame(#
+  order = c("Order1", "Order1", "Order2", "Order2"),#
+  family = c("Family1", "Family2", "Family3", "Family4"),#
+  genus = c("Genus1", "Genus2", "Genus3", "Genus4"),#
+  species = c("Species1", "Species2", "Species3", "Species4"),#
+  status = c("Identified", "Identified", "Unidentified", "Identified")#
+)
+ggplot(data, aes(x = order, y = species, fill = status)) +#
+  geom_tile() +#
+  scale_fill_manual(values = c("Identified" = "desired_color", "Unidentified" = "gray")) +#
+  theme_minimal()
+setwd("~/SharkPulse/s/sharkPulseR")
+devtools::document()
+devtools::build()
+devtools::test()
+devtools::check()
+devtools::install()
+require(sharkPulseR)
+dat <- getSharkPulse(dbuser="spr",dbpass="spr_pass") # add an option to select the table in the database
+source("cleanData.R")
+source("../s/cleanData.R")
+source("../../s/cleanData.R")
+dat = cleanData(dat) # this prodices valid records, not inland, not close to aquaria e with corrected nomenclature
+??getBufferedworld
+devtools::document()
+devtools::build()
+devtools::install()
+getBufferedWorld
+remove.packages("sharkPulseR")
+devtools::install()
