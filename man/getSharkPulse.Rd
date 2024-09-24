@@ -2,15 +2,17 @@
 % Please edit documentation in R/getSharkPulse.R
 \name{getSharkPulse}
 \alias{getSharkPulse}
-\title{Get the entire sharkPulse table}
+\title{Get the entire sharkPulse table via DB or API}
 \usage{
-getSharkPulse(dbuser, dbpass)
+getSharkPulse(dbuser, dbpass, external = FALSE)
 }
 \arguments{
 \item{dbuser}{sCPUEdb user with privileges to access the sharkpulse table}
 
 \item{dbpass}{sCPUEdb password for user with privileges to access the sharkpulse table}
+
+\item{external}{Boolean indicating whether the user is external (True) or internal (False, default)}
 }
 \description{
-Get the entire sharkPulse table
+Get the entire sharkPulse table via DB or API
 }
