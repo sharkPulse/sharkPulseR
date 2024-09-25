@@ -17,3 +17,6 @@ Imports:
 	sp,
 	RCurl,
 	bitops
+URL: https://github.com/sharkPulse/sharkPulseR
+BugReports: https://github.com/sharkPulse/sharkPulseR/issues
+
