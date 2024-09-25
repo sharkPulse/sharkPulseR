@@ -1,1 +1,1 @@
-Package to explore, query and process sharkPulse data. 
+Package with functions to manipulate, extract, visualize and analyze sharkPulse data. 
