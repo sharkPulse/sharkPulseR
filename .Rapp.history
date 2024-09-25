@@ -1,3 +1,13 @@
+plot(Kopts~deltas, type = "l", las = 1)
+plot(Kopts~deltas, type = "l", las = 1, ylab = "Optimum investment ($ million)")
+plot(Kopts/1000~deltas, type = "l", las = 1, ylab = "Optimum investment ($ million)")
+384627000*(delta+m)
+delta
+ma
+m
+lsigmas = seq(0,0.6,0.01)
+lsigmas
+oQs = qlnorm(FcC, lmu, lsigmas)
 oQs
 Kopts = oQs/k1
 Kopts
@@ -427,22 +437,12 @@ ggplot(data, aes(x = order, y = species, fill = status)) +#
   geom_tile() +#
   scale_fill_manual(values = c("Identified" = "desired_color", "Unidentified" = "gray")) +#
   theme_minimal()
+require(sharkPulseR)
+citation(sharkPulseR)
+citation(package = "sharkPulseR")
 setwd("~/SharkPulse/s/sharkPulseR")
 devtools::document()
 devtools::build()
-devtools::test()
-devtools::check()
-devtools::install()
-require(sharkPulseR)
-dat <- getSharkPulse(dbuser="spr",dbpass="spr_pass") # add an option to select the table in the database
-source("cleanData.R")
-source("../s/cleanData.R")
-source("../../s/cleanData.R")
-dat = cleanData(dat) # this prodices valid records, not inland, not close to aquaria e with corrected nomenclature
-??getBufferedworld
 devtools::document()
 devtools::build()
-devtools::install()
-getBufferedWorld
-remove.packages("sharkPulseR")
 devtools::install()
