@@ -10,8 +10,7 @@
 #' dat
 #' @export
 connectPelagic = function(dbuser, dbpass){
-  require(RPostgreSQL)
-  require(RH2) 	
+  require(RPostgreSQL)	
   	dbname = "pelagic"
     dbhost <- "sp2.cs.vt.edu"
   	dbport <- 5432
@@ -30,9 +29,8 @@ connectPelagic = function(dbuser, dbpass){
 #' dat
 #' @export
 connectMed = function(dbuser, dbpass, db = "med_monitoring"){
-  require(RPostgreSQL)
-  require(RH2) 	
-  	dbname = medows
+  require(RPostgreSQL) 	
+  	dbname = db
     dbhost <- "sp2.cs.vt.edu"
   	dbport <- 5432
   	drv <- dbDriver("PostgreSQL") 

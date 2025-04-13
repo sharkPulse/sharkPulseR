@@ -2,6 +2,7 @@
 
 export(Flickr_toData)
 export(IUCN_map)
+export(connectMed)
 export(connectPelagic)
 export(csv2html)
 export(dfc)

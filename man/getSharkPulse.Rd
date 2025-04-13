@@ -4,7 +4,7 @@
 \alias{getSharkPulse}
 \title{Get the entire sharkPulse table via DB or API}
 \usage{
-getSharkPulse(dbuser, dbpass, external = FALSE)
+getSharkPulse(dbuser, dbpass, external = FALSE, addpm = FALSE)
 }
 \arguments{
 \item{dbuser}{sCPUEdb user with privileges to access the sharkpulse table}
@@ -12,6 +12,8 @@ getSharkPulse(dbuser, dbpass, external = FALSE)
 \item{dbpass}{sCPUEdb password for user with privileges to access the sharkpulse table}
 
 \item{external}{Boolean indicating whether the user is external (True) or internal (False, default)}
+
+\item{addpm}{Boolean indicating whether to include port monitoring data}
 }
 \description{
 Get the entire sharkPulse table via DB or API

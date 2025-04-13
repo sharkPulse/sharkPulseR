@@ -79,7 +79,8 @@ getSharkPulse = function(dbuser, dbpass, external = FALSE, addpm = FALSE) {
       # wsc$source_type = ""
       # wsc$table = "wsdata"
 
-
+      dbDisconnect(con_med)
+      # dbDisconnect(con_wsc)
     }
 
     # Combine data from different sources into one dataframe
@@ -87,8 +88,6 @@ getSharkPulse = function(dbuser, dbpass, external = FALSE, addpm = FALSE) {
     colnames(dat) <- c("common_name", "species_name", "latitude", "longitude", "date", "location", "img_name", "source", "source_type", "table")
     
     dbDisconnect(con)
-    dbDisconnect(con_med)
-    # dbDisconnect(con_wsc)
     return(dat)
     
   } else {
