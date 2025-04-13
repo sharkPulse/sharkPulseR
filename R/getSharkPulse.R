@@ -3,8 +3,9 @@
 #' @param dbuser sCPUEdb user with privileges to access the sharkpulse table
 #' @param dbpass sCPUEdb password for user with privileges to access the sharkpulse table
 #' @param external Boolean indicating whether the user is external (True) or internal (False, default)
+#' @param addpm Boolean indicating whether to include port monitoring data
 #' @export
-getSharkPulse = function(dbuser, dbpass, external = FALSE) {
+getSharkPulse = function(dbuser, dbpass, external = FALSE, addpm = FALSE) {
   require(lubridate)
   require(httr)
   require(jsonlite)
@@ -55,11 +56,39 @@ getSharkPulse = function(dbuser, dbpass, external = FALSE) {
     flickr_new$source_type <- "Flickr"
     flickr_new$table <- "flickr_new"
     
+    if (addpm) {
+      con_med <- connectMed(dbuser, dbpass)
+      query6 <- "SELECT '' AS common_name, species AS species_name, lat AS latitude, lon AS longitude, location, img_name, original_date AS date, 'Port Monitoring' AS source 
+               FROM catches 
+               WHERE species IS NOT NULL
+               AND lat IS NOT NULL
+               AND lon IS NOT NULL;"
+      catches_med = dbGetQuery(con_med, query6)
+      catches_med$source_type = "Port Monitoring"
+      catches_med$table = "catches"
+      # catches_med = catches_med[catches_med$species_name!="Carcharodon carcharias",]
+      
+
+      # con_wsc <- connectMed(dbuser, dbpass, db = "wsc")
+      # query7 = "SELECT 'White shark' AS common_name, "Carcharodon carcharias" AS species_name, lat AS latitude, lon AS longitude, location, img_name, original_date AS date, 'WSC' AS source 
+      #          FROM catches 
+      #          WHERE species IS NOT NULL
+      #          AND lat IS NOT NULL
+      #          AND lon IS NOT NULL;"
+      # wsc = dbGetQuery(con_wsc, query7)
+      # wsc$source_type = ""
+      # wsc$table = "wsdata"
+
+
+    }
+
     # Combine data from different sources into one dataframe
-    dat <- rbind(sharkpulse, flickr, flickr_new, inat, instagram)
+    dat <- if (addpm) rbind(sharkpulse, flickr, flickr_new, inat, instagram, catches_med) else (rbind(sharkpulse, flickr, flickr_new, inat, instagram))
     colnames(dat) <- c("common_name", "species_name", "latitude", "longitude", "date", "location", "img_name", "source", "source_type", "table")
     
     dbDisconnect(con)
+    dbDisconnect(con_med)
+    # dbDisconnect(con_wsc)
     return(dat)
     
   } else {
