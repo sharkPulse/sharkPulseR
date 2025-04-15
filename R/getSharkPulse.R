@@ -58,7 +58,7 @@ getSharkPulse = function(dbuser, dbpass, external = FALSE, addpm = FALSE) {
     
     if (addpm) {
       con_med <- connectMed(dbuser, dbpass)
-      query6 <- "SELECT '' AS common_name, species AS species_name, lat AS latitude, lon AS longitude, location, img_name, original_date AS date, 'Port Monitoring' AS source 
+      query6 <- "SELECT '' AS common_name, species AS species_name, lat AS latitude, lon AS longitude, location, img_path AS img_name, original_date AS date, 'Port Monitoring' AS source 
                FROM catches 
                WHERE species IS NOT NULL
                AND lat IS NOT NULL
