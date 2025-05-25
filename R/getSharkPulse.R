@@ -51,6 +51,7 @@ getSharkPulse = function(dbuser, dbpass, external = FALSE, addpm = FALSE) {
             NULL AS common_name, species AS species_name, latitude, longitude, location, img_name, date, source
         FROM training_copy
         WHERE source = 'YouTube'
+        AND latitude is not null
         ORDER BY species, source, location, img_name;
         "
 
