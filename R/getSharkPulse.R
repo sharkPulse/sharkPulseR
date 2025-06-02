@@ -97,7 +97,7 @@ getSharkPulse = function(dbuser, dbpass, external = FALSE, addpm = FALSE) {
     }
 
     # Combine data from different sources into one dataframe
-    dat <- if (addpm) rbind(sharkpulse, flickr, flickr_new, inat, instagram, youtube, catches_med) else (rbind(sharkpulse, flickr, flickr_new, inat, instagram, youtube))
+    dat <- if (addpm) rbind(sharkpulse, flickr_new, inat, instagram, youtube, catches_med) else (rbind(sharkpulse, flickr_new, inat, instagram, youtube))
     colnames(dat) <- c("common_name", "species_name", "latitude", "longitude", "date", "location", "img_name", "source", "source_type", "table")
     
     dbDisconnect(con)
