@@ -62,7 +62,7 @@ getSharkPulse = function(dbuser, dbpass, external = FALSE, addpm = FALSE) {
     # New Flickr -- query removes duplicates of Flickr records
     query5 <- "SELECT common_name_cs AS common_name, species_name_cs AS species_name, datetaken AS date, latitude, longitude, '' AS location, img_name, 'Flickr' AS source 
                FROM flickr_new fn 
-               WHERE validated='t' AND latitude IS NOT NULL AND species_name_cs is not null;" 
+               WHERE validated='t' AND latitude IS NOT NULL AND species_name_cs is not null and aquarium != 't';" 
     # AND NOT EXISTS (SELECT 1 FROM flickr f WHERE fn.url_m = f.img_name);"
     flickr_new <- dbGetQuery(con, query5)
     flickr_new$date <- as.Date(ymd_hms(flickr_new$date))
