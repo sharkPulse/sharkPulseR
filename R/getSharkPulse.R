@@ -22,12 +22,12 @@ getSharkPulse = function(dbuser, dbpass, external = FALSE, addpm = FALSE) {
     sharkpulse$table <- 'sharkpulse'
     
     # Flickr
-    query2 <- "SELECT common_name_1 AS common_name, species_name_1 AS species_name, latitude, longitude, date, img_name, '' AS location , 'Flickr' AS source 
-               FROM flickr 
-               WHERE validated='t' AND latitude IS NOT NULL AND species_name_1 IS NOT NULL;"
-    flickr <- dbGetQuery(con, query2)
-    flickr$source_type <- "Flickr"
-    flickr$table <- "flickr"
+    # query2 <- "SELECT common_name_1 AS common_name, species_name_1 AS species_name, latitude, longitude, date, img_name, '' AS location , 'Flickr' AS source 
+    #            FROM flickr 
+    #            WHERE validated='t' AND latitude IS NOT NULL AND species_name_1 IS NOT NULL;"
+    # flickr <- dbGetQuery(con, query2)
+    # flickr$source_type <- "Flickr"
+    # flickr$table <- "flickr"
     
     # iNaturalist
     query3 <- "SELECT common_name, scientific_name AS species_name, datetime AS date, latitude, longitude, place_guess AS location, img_name, 'iNaturalist' AS source 
@@ -41,7 +41,7 @@ getSharkPulse = function(dbuser, dbpass, external = FALSE, addpm = FALSE) {
     # Instagram
     query4 <- "SELECT common_name, species_name, latitude, longitude, location, img_name, date, 'Instagram' AS source 
                FROM instagram 
-               WHERE repost!='t' AND aquarium!='t' AND validated='t' AND shark='shark' AND species_name IS NOT NULL;"
+               WHERE repost!='t' AND aquarium!='t' AND validated='t' AND shark='t' AND species_name IS NOT NULL;"
     instagram <- dbGetQuery(con, query4)
     instagram$source_type <- "Instagram"
     instagram$table <- 'instagram'
@@ -62,8 +62,8 @@ getSharkPulse = function(dbuser, dbpass, external = FALSE, addpm = FALSE) {
     # New Flickr -- query removes duplicates of Flickr records
     query5 <- "SELECT common_name_cs AS common_name, species_name_cs AS species_name, datetaken AS date, latitude, longitude, '' AS location, img_name, 'Flickr' AS source 
                FROM flickr_new fn 
-               WHERE validated='t' AND latitude IS NOT NULL AND species_name_cs != '' 
-               AND NOT EXISTS (SELECT 1 FROM flickr f WHERE fn.url_m = f.img_name);"
+               WHERE validated='t' AND latitude IS NOT NULL AND species_name_cs is not null;" 
+    # AND NOT EXISTS (SELECT 1 FROM flickr f WHERE fn.url_m = f.img_name);"
     flickr_new <- dbGetQuery(con, query5)
     flickr_new$date <- as.Date(ymd_hms(flickr_new$date))
     flickr_new$source_type <- "Flickr"
