@@ -110,7 +110,18 @@ getSharkPulse = function(dbuser, dbpass, external = FALSE, addpm = FALSE) {
     
     if (status_code(response) == 200) {
       data <- content(response, "parsed", simplifyVector = TRUE)
-      dat <- as.data.frame(data)
+      data <- jsonlite::fromJSON(data, simplifyDataFrame = TRUE)
+      # Robustly convert list of records to data.frame:
+      if (is.data.frame(data)) {
+        dat <- data
+      } else if (is.list(data) && is.list(data[[1]])) {
+        # This is a list of named lists: turn into data.frame
+        dat <- do.call(rbind, lapply(data, as.data.frame, stringsAsFactors = FALSE))
+        # Sometimes rbind will result in a matrix; ensure data.frame:
+        dat <- as.data.frame(dat, stringsAsFactors = FALSE)
+      } else {
+        stop("Unknown data structure returned from API.")
+      }
       return(dat)
     } else {
       stop("Failed to retrieve data: ", status_code(response), " - ", content(response, "text"))
