@@ -3,6 +3,6 @@ Package with functions to manipulate, extract, visualize and analyze sharkPulse 
 
 ## Installation
 
-You can install the package directly from GitHub using the devtools package:
+You can install the package directly from this GitHub repo using:
 
 `devtools::install_github("sharkPulse/sharkPulseR")`
