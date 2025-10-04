@@ -108,24 +108,26 @@ getSharkPulse = function(dbuser, dbpass, external = FALSE, addpm = FALSE) {
     url <- paste0("http://sp2.cs.vt.edu:8086/get_combined_data?username=", dbuser, "&password=", dbpass)
     response <- GET(url)
     
-    if (status_code(response) == 200) {
-      data <- content(response, "parsed", simplifyVector = TRUE)
-      data <- jsonlite::fromJSON(data, simplifyDataFrame = TRUE)
-      # Robustly convert list of records to data.frame:
-      if (is.data.frame(data)) {
-        dat <- data
-      } else if (is.list(data) && is.list(data[[1]])) {
-        # This is a list of named lists: turn into data.frame
-        dat <- do.call(rbind, lapply(data, as.data.frame, stringsAsFactors = FALSE))
-        # Sometimes rbind will result in a matrix; ensure data.frame:
-        dat <- as.data.frame(dat, stringsAsFactors = FALSE)
-      } else {
-        stop("Unknown data structure returned from API.")
-      }
-      return(dat)
-    } else {
-      stop("Failed to retrieve data: ", status_code(response), " - ", content(response, "text"))
-    }
+if (status_code(response) == 200) {
+  # Either do this:
+  data <- content(response, "parsed", simplifyVector = TRUE)
+
+  # or do this:
+  # data <- jsonlite::fromJSON(content(response, "text"), simplifyDataFrame = TRUE)
+  
+  # Now handle the structure:
+  if (is.data.frame(data)) {
+    dat <- data
+  } else if (is.list(data) && is.list(data[[1]])) {
+    dat <- do.call(rbind, lapply(data, as.data.frame, stringsAsFactors = FALSE))
+    dat <- as.data.frame(dat, stringsAsFactors = FALSE)
+  } else {
+    stop("Unknown data structure returned from API.")
+  }
+  return(dat)
+} else {
+  stop("Failed to retrieve data: ", status_code(response), " - ", content(response, "text"))
+}
   }
 }
 
