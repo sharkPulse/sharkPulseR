@@ -11,7 +11,7 @@
 #' @export
 connectPelagic = function(dbuser, dbpass){
   require(RPostgreSQL)	
-  	dbname = "pelagic"
+  	dbname = "sharkpulse"
     dbhost <- "sp2.cs.vt.edu"
   	dbport <- 5432
   	drv <- dbDriver("PostgreSQL") 
