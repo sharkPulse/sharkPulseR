@@ -65,7 +65,8 @@ getSharkPulse = function(dbuser, dbpass, external = FALSE, addpm = FALSE) {
                WHERE validated='t' AND latitude IS NOT NULL AND species_name_cs is not null and aquarium != 't';" 
     # AND NOT EXISTS (SELECT 1 FROM flickr f WHERE fn.url_m = f.img_name);"
     flickr_new <- dbGetQuery(con, query5)
-    flickr_new$date <- as.Date(ymd_hms(flickr_new$date))
+    # flickr_new$date <- as.Date(ymd_hms(flickr_new$date))
+    flickr_new$date <- as.Date(flickr_new$date)
     flickr_new$source_type <- "Flickr"
     flickr_new$table <- "flickr_new"
     
