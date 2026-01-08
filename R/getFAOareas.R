@@ -21,10 +21,10 @@ getFaoNames <- function(dat) {
   # Create a data frame of points
   points_df <- data.frame(longitude = longitudes, latitude = latitudes)
   # Convert the data frame to an sf object
-  points_sf <- st_as_sf(points_df, coords = c("longitude", "latitude"), crs = st_crs(fao_areas))
+  points_sf <- sf::st_as_sf(points_df, coords = c("longitude", "latitude"), crs = sf::st_crs(fao_areas))
   
   # Perform a spatial join between points and FAO areas
-  joined <- st_join(points_sf, fao_areas_major, join = st_intersects)
+  joined <- sf::st_join(points_sf, fao_areas_major, join = sf::st_intersects)
   
   # Extract the zone names in English
   zone_names_en <- joined$NAME_EN
