@@ -5,10 +5,20 @@
 #' @export
 load_fao_areas <- function() {
   # Path to the uploaded shapefile (ensure all associated files are in the same directory)
-  shapefile_path <- "extdata/FAO_AREAS_CWP_NOCOASTLINE/FAO_AREAS_CWP_NOCOASTLINE.shp"
-  fao_areas <- sf::st_read(shapefile_path)
-  fao_areas <- sf::st_make_valid(fao_areas)
-  return(fao_areas)
+  #shapefile_path <- "extdata/FAO_AREAS_CWP_NOCOASTLINE/FAO_AREAS_CWP_NOCOASTLINE.shp"
+
+  shp <- system.file(
+    "extdata/FAO_AREAS_CWP_NOCOASTLINE/FAO_AREAS_CWP_NOCOASTLINE.shp",
+    package = "sharkPulseR"
+  )
+
+  #fao_areas <- sf::st_read(shapefile_path)
+  #fao_areas <- sf::st_make_valid(fao_areas)
+  #return(fao_areas)
+
+  fao <- sf::st_read(shp, quiet = TRUE)
+  sf::st_make_valid(fao)
+
 }
 
 #' Get FAO area for records
