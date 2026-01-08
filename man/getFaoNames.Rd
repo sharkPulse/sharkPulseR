@@ -4,12 +4,10 @@
 \alias{getFaoNames}
 \title{Get FAO area for records}
 \usage{
-getFaoNames(dat, fao_areas)
+getFaoNames(dat)
 }
 \arguments{
 \item{dat}{usually sharkpulse data with latitude and longitude. It can be any occurrence record dataset.}
-
-\item{fao_areas}{shape file of FAO major fisheries areas}
 }
 \description{
 Function to get the FAO zone names in English for a set of points.

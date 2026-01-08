@@ -4,9 +4,8 @@
 #'
 #' Function to get the FAO zone names in English for a set of points.
 #' @param dat usually sharkpulse data with latitude and longitude. It can be any occurrence record dataset.
-#' @param fao_areas shape file of FAO major fisheries areas
 #' @export
-getFaoNames <- function(dat, fao_areas) {
+getFaoNames <- function(dat) {
   
   latitudes <- dat$latitude
   longitudes <- dat$longitude
@@ -17,7 +16,7 @@ getFaoNames <- function(dat, fao_areas) {
   fao_areas = sf::st_make_valid(fao_areas)
 
   # Filter FAO areas to include only those with F_LEVEL equal to "MAJOR"
-  fao_areas_major <- fao_areas %>% filter(F_LEVEL == "MAJOR")
+  fao_areas_major <- dplyr::filter(fao_areas, F_LEVEL == "MAJOR")
   
   # Create a data frame of points
   points_df <- data.frame(longitude = longitudes, latitude = latitudes)
