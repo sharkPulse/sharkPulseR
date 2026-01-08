@@ -16,7 +16,10 @@ Imports:
 	mapdata,
 	sp,
 	RCurl,
-	bitops
+	bitops,
+	sf
+	dplyr
+	lwgeom
 URL: https://github.com/sharkPulse/sharkPulseR
 BugReports: https://github.com/sharkPulse/sharkPulseR/issues
 
