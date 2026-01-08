@@ -1,25 +1,4 @@
 
-#' Load FAO Major Fishing Areas
-#'
-#' @return An sf object with FAO fishing areas
-#' @export
-load_fao_areas <- function() {
-  # Path to the uploaded shapefile (ensure all associated files are in the same directory)
-  #shapefile_path <- "extdata/FAO_AREAS_CWP_NOCOASTLINE/FAO_AREAS_CWP_NOCOASTLINE.shp"
-
-  shp <- system.file(
-    "extdata/FAO_AREAS_CWP_NOCOASTLINE/FAO_AREAS_CWP_NOCOASTLINE.shp",
-    package = "sharkPulseR"
-  )
-
-  #fao_areas <- sf::st_read(shapefile_path)
-  #fao_areas <- sf::st_make_valid(fao_areas)
-  #return(fao_areas)
-
-  fao <- sf::st_read(shp, quiet = TRUE)
-  sf::st_make_valid(fao)
-
-}
 
 #' Get FAO area for records
 #'
@@ -31,6 +10,11 @@ getFaoNames <- function(dat, fao_areas) {
   
   latitudes <- dat$latitude
   longitudes <- dat$longitude
+
+  #load FAO areas
+  shp <- system.file("extdata/FAO_AREAS_CWP_NOCOASTLINE/FAO_AREAS_CWP_NOCOASTLINE.shp",package = "sharkPulseR")
+  fao_areas <- sf::st_read(shp, quiet = TRUE)
+  fao_areas = sf::st_make_valid(fao_areas)
 
   # Filter FAO areas to include only those with F_LEVEL equal to "MAJOR"
   fao_areas_major <- fao_areas %>% filter(F_LEVEL == "MAJOR")
@@ -62,7 +46,7 @@ isinfao <- function(fao_code, species_name, areas) {
 #' Map species records on a FAO map
 #' 
 #' @param species species name
-#' @records sharkPulse records
+#' @param records sharkPulse records
 #' @export
 FAO_map <- function(species, records = dat) {
 
