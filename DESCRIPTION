@@ -17,8 +17,8 @@ Imports:
 	sp,
 	RCurl,
 	bitops,
-	sf
-	dplyr
+	sf,
+	dplyr,
 	lwgeom
 URL: https://github.com/sharkPulse/sharkPulseR
 BugReports: https://github.com/sharkPulse/sharkPulseR/issues
